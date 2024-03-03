@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Camera Access Example</title>
+  <style>
+    video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Camera Access Example</h1>
+  <button id="startButton">Start Camera</button>
+  <button id="stopButton">Stop Camera</button>
+  <video id="videoElement" autoplay></video>
+
+  <script>
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const videoElement = document.getElementById('videoElement');
+    let stream;
+
+    startButton.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoElement.srcObject = stream;
+      } catch (error) {
+        console.log('Error accessing camera: ', error);
+      }
+    });
+
+    stopButton.addEventListener('click', () => {
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+        videoElement.srcObject = null;
+      }
+    });
+  </script>
+</body>
+</html>
